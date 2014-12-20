@@ -21,6 +21,7 @@ void setup() {
 } 
 
 void draw() {
+	background(255);
 	one_guy.update();
 
 	/* Update Signal */
@@ -30,6 +31,12 @@ void draw() {
 	one_guy.step(signal);
 
 	one_guy.draw();
+
+	pushStyle();
+	noStroke();
+	fill(color(0, 0, 255));
+	ellipse(width / 2, height / 2, 10, 10);
+	popStyle();
 }
 
 class Guy {
