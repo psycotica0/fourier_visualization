@@ -1,52 +1,76 @@
-float rotate_rate = 2;
 float signal_rate = 2;
-
-int x;
-int y;
-float angle;
 
 float signal_angle;
 
+Guy one_guy;
+
 void setup() {
-    
-    // set the background color
-    background(255);
-    
-    size(300, 300);
+	// set the background color
+	background(255);
 
-    x = width / 2;
-    y = height / 2;
-    angle = 0;
+	size(300, 300);
 
-    signal_angle = 0;
-      
-    // smooth edges
-    smooth();
-    
-    // limit the number of frames per second
-    frameRate(30);
+	one_guy = new Guy(width/2, height/2, 2);
+	signal_angle = 0;
+
+	// smooth edges
+	smooth();
+
+	// limit the number of frames per second
+	frameRate(30);
 } 
 
 void draw() {
-		// Move my guy to his place
-    translate(x, y);
-		// Rotate him to face the right way
-    rotate(angle);
-		// Draw him
-    guy();
+	one_guy.update();
 
-		// Update his state
-    angle += rotate_rate * TWO_PI / frameRate;
-    signal_angle += signal_rate * TWO_PI / frameRate;
-    signal = sin(signal_angle);
-    y += -signal * sin(angle);
-    x += signal * cos(angle);
+	/* Update Signal */
+	signal_angle += signal_rate * TWO_PI / frameRate;
+	signal = sin(signal_angle);
+
+	one_guy.step(signal);
+
+	one_guy.draw();
 }
 
-void guy() {
-    radius = 10;
-    facing_width = 4;
-    facing_height = 15;
-    ellipse(0, 0, radius * 2, radius * 2);
-    rect(-facing_width / 2, - facing_height, facing_width, facing_height);
+class Guy {
+	/* These the current state of the guy */
+	int x;
+	int y;
+	float angle;
+
+	/* This remembers the rate we want to spin at */
+	float rate;
+
+	/* These are just drawing parameters */
+	final int radius = 10;
+	final int facing_width = 4;
+	final int facing_height = 15;
+
+	Guy(int xs, int ys, float rotate_rate) {
+		this.x = xs;
+		this.y = ys;
+		this.rate = rotate_rate;
+		this.angle = 0;
+	}
+
+	void draw() {
+		pushMatrix();
+
+		translate(this.x, this.y);
+		rotate(this.angle);
+
+		ellipse(0, 0, this.radius * 2, this.radius * 2);
+		rect(-this.facing_width / 2, - this.facing_height, this.facing_width, this.facing_height);
+
+		popMatrix();
+	}
+
+	void update() {
+		angle += this.rate * TWO_PI / frameRate;
+	}
+
+	void step(float speed) {
+		y += -speed * sin(this.angle);
+		x += speed * cos(this.angle);
+	}
 }
