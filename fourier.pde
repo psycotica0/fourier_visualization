@@ -1,7 +1,4 @@
-float signal_rate = 2;
-
-float signal_angle;
-
+Signal signal;
 Guy one_guy;
 
 void setup() {
@@ -11,7 +8,7 @@ void setup() {
 	size(300, 300);
 
 	one_guy = new Guy(width/2, height/2, 2);
-	signal_angle = 0;
+	signal = new Signal(2, 0);
 
 	// smooth edges
 	smooth();
@@ -23,12 +20,9 @@ void setup() {
 void draw() {
 	background(255);
 	one_guy.update();
+	signal.update();
 
-	/* Update Signal */
-	signal_angle += signal_rate * TWO_PI / frameRate;
-	signal = sin(signal_angle);
-
-	one_guy.step(signal);
+	one_guy.step(signal.value());
 
 	one_guy.draw();
 
@@ -79,5 +73,23 @@ class Guy {
 	void step(float speed) {
 		y += -speed * sin(this.angle);
 		x += speed * cos(this.angle);
+	}
+}
+
+class Signal {
+	float rate;
+	float angle;
+
+	Signal(float freq, float phase) {
+		this.rate = freq;
+		this.angle = phase;
+	}
+
+	void update() {
+		this.angle += this.rate * TWO_PI / frameRate;
+	}
+
+	void value() {
+		return sin(this.angle);
 	}
 }
