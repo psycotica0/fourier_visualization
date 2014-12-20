@@ -114,12 +114,28 @@ class Signal {
 		this.angle = phase;
 	}
 
+	float step() {
+		return this.rate * TWO_PI / frameRate;
+	}
+
 	void update() {
-		this.angle += this.rate * TWO_PI / frameRate;
+		this.angle += this.step();
+	}
+
+	float[] values(int n) {
+		float[] ret = new float[n];
+		float theta = this.angle;
+
+		for (int i=0; i < n; i++) {
+			ret[i] = sin(theta);
+			theta += this.step();
+		}
+
+		return ret;
 	}
 
 	float value() {
-		return sin(this.angle);
+		return this.values(1)[0];
 	}
 }
 
@@ -136,12 +152,15 @@ class CompositeSignal extends Signal {
 		}
 	}
 
-	float value() {
-		float sum = 0;
+	float values(int n) {
+		float[] sums = new float[n];
 		for (int i = 0; i < this.signals.length; i++) {
-			sum += this.signals[i].value();
+			float[] vs = this.signals[i].values(n);
+			for (int j = 0; j < n; j++) {
+				sums[j] = (sums[j] * i + vs[j]) / (i + 1);
+			}
 		}
 
-		return sum / this.signals.length;
+		return sums;
 	}
 }
