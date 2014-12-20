@@ -8,7 +8,10 @@ void setup() {
 	size(300, 300);
 
 	one_guy = new Guy(width/2, height/2, 2);
-	signal = new Signal(2, 0);
+	signal = new CompositeSignal({
+		new Signal(2, 0),
+		new Signal(1.5, 0)
+	});
 
 	// smooth edges
 	smooth();
@@ -91,5 +94,28 @@ class Signal {
 
 	void value() {
 		return sin(this.angle);
+	}
+}
+
+class CompositeSignal extends Signal {
+	Signal[] signals;
+
+	CompositeSignal(Signal[] inputs) {
+		this.signals = inputs;
+	}
+
+	void update() {
+		for (int i = 0; i < this.signals.length; i++) {
+			this.signals[i].update();
+		}
+	}
+
+	void value() {
+		float sum = 0;
+		for (int i = 0; i < this.signals.length; i++) {
+			sum += this.signals[i].value();
+		}
+
+		return sum / this.signals.length;
 	}
 }
