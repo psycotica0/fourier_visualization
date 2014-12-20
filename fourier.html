@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>
+			Fourier Visualization
+		</title>
+		<script type="application/javascript" src="https://raw.github.com/processing-js/processing-js/v1.4.8/processing.js"></script>
+		<script type="application/javascript">
+			function reset() {
+				var proc = Processing.getInstanceById("sim");
+				proc.setup();
+				proc.loop();
+			}
+			function stop() {
+				var proc = Processing.getInstanceById("sim");
+				proc.noLoop();
+			}
+		</script>
+	</head>
+	<body>
+		<h1> Fourier Visualization </h1>
+		<button onClick="reset()">Reset</button>
+		<button onClick="stop()">Stop</button>
+		<canvas data-processing-sources="fourier.pde" id="sim"></canvas>
+	</body>
+</html>

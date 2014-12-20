@@ -1,9 +1,11 @@
 float rotate_rate = 2;
+float signal_rate = 2;
+
 int x;
 int y;
 float angle;
-signal_rate = 2;
-signal_angle = 0;
+
+float signal_angle;
 
 void setup() {
     
@@ -15,6 +17,8 @@ void setup() {
     x = width / 2;
     y = height / 2;
     angle = 0;
+
+    signal_angle = 0;
       
     // smooth edges
     smooth();
