@@ -1,3 +1,6 @@
+int origin_x;
+int origin_y;
+
 Signal signal;
 Guy[] guys;
 
@@ -7,11 +10,14 @@ void setup() {
 
 	size(300, 300);
 
+	origin_x = width/2;
+	origin_y = height/2;
+
 	guys = {
-		new Guy(width/2, height/2, 2),
-		new Guy(width/2, height/2, 1.5),
-		new Guy(width/2, height/2, 1),
-		new Guy(width/2, height/2, 0.5),
+		new Guy(2),
+		new Guy(1.5),
+		new Guy(1),
+		new Guy(0.5),
 	};
 
 	signal = new CompositeSignal({
@@ -39,7 +45,7 @@ void draw() {
 	pushStyle();
 	noStroke();
 	fill(color(0, 0, 255));
-	ellipse(width / 2, height / 2, 10, 10);
+	ellipse(origin_x, origin_y, 10, 10);
 	popStyle();
 }
 
@@ -57,9 +63,9 @@ class Guy {
 	final int facing_width = 4;
 	final int facing_height = 15;
 
-	Guy(int xs, int ys, float rotate_rate) {
-		this.x = xs;
-		this.y = ys;
+	Guy(float rotate_rate) {
+		this.x = origin_x;
+		this.y = origin_y;
 		this.rate = rotate_rate;
 		this.angle = 0;
 	}
