@@ -92,7 +92,7 @@ class Signal {
 		this.angle += this.rate * TWO_PI / frameRate;
 	}
 
-	void value() {
+	float value() {
 		return sin(this.angle);
 	}
 }
@@ -110,7 +110,7 @@ class CompositeSignal extends Signal {
 		}
 	}
 
-	void value() {
+	float value() {
 		float sum = 0;
 		for (int i = 0; i < this.signals.length; i++) {
 			sum += this.signals[i].value();
