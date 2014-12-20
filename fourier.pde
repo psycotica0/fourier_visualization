@@ -1,3 +1,8 @@
+color pink = color(255, 200, 200);
+color cyan = color(0, 255, 255);
+color yellow = color(255, 255, 0);
+color magenta = color(255, 0, 255);
+
 int origin_x;
 int origin_y;
 
@@ -14,10 +19,10 @@ void setup() {
 	origin_y = height/2;
 
 	guys = {
-		new Guy(2),
-		new Guy(1.5),
-		new Guy(1),
-		new Guy(0.5),
+		new Guy(2, pink),
+		new Guy(1.5, cyan),
+		new Guy(1, yellow),
+		new Guy(0.5, magenta),
 	};
 
 	signal = new CompositeSignal({
@@ -58,16 +63,20 @@ class Guy {
 	/* This remembers the rate we want to spin at */
 	float rate;
 
+	/* Drawing Colours */
+	color fillColor;
+
 	/* These are just drawing parameters */
 	final int radius = 10;
 	final int facing_width = 4;
 	final int facing_height = 15;
 
-	Guy(float rotate_rate) {
+	Guy(float rotate_rate, color c) {
 		this.x = origin_x;
 		this.y = origin_y;
 		this.rate = rotate_rate;
 		this.angle = 0;
+		this.fillColor = c;
 	}
 
 	void draw() {
@@ -76,7 +85,11 @@ class Guy {
 		translate(this.x, this.y);
 		rotate(this.angle);
 
+		pushStyle();
+		fill(this.fillColor);
 		ellipse(0, 0, this.radius * 2, this.radius * 2);
+		popStyle();
+
 		rect(-this.facing_width / 2, - this.facing_height, this.facing_width, this.facing_height);
 
 		popMatrix();
