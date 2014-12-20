@@ -28,7 +28,9 @@ void setup() {
 
 	signal = new CompositeSignal({
 		new Signal(2, 0),
-		new Signal(1.5, 0.5 * PI)
+		new Signal(1.5, 0.5 * PI),
+		new Signal(1, 0.5 * PI),
+		new Signal(2.9, 0),
 	});
 
 	vis = new Graph(150, 75);
@@ -37,7 +39,7 @@ void setup() {
 	smooth();
 
 	// limit the number of frames per second
-	frameRate(30);
+	frameRate(20);
 } 
 
 void draw() {
