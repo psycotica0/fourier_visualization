@@ -1,5 +1,5 @@
 Signal signal;
-Guy one_guy;
+Guy[] guys;
 
 void setup() {
 	// set the background color
@@ -7,10 +7,16 @@ void setup() {
 
 	size(300, 300);
 
-	one_guy = new Guy(width/2, height/2, 2);
+	guys = {
+		new Guy(width/2, height/2, 2),
+		new Guy(width/2, height/2, 1.5),
+		new Guy(width/2, height/2, 1),
+		new Guy(width/2, height/2, 0.5),
+	};
+
 	signal = new CompositeSignal({
 		new Signal(2, 0),
-		new Signal(1.5, 0)
+		new Signal(1.5, 0.5 * PI)
 	});
 
 	// smooth edges
@@ -22,12 +28,13 @@ void setup() {
 
 void draw() {
 	background(255);
-	one_guy.update();
 	signal.update();
 
-	one_guy.step(signal.value());
-
-	one_guy.draw();
+	for (int i=0; i < guys.length; i++) {
+		guys[i].update();
+		guys[i].step(signal.value());
+		guys[i].draw();
+	}
 
 	pushStyle();
 	noStroke();
