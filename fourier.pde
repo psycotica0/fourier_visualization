@@ -8,6 +8,7 @@ int origin_y;
 
 Signal signal;
 Guy[] guys;
+Graph vis;
 
 void setup() {
 	// set the background color
@@ -30,6 +31,8 @@ void setup() {
 		new Signal(1.5, 0.5 * PI)
 	});
 
+	vis = new Graph(150, 75);
+
 	// smooth edges
 	smooth();
 
@@ -41,11 +44,15 @@ void draw() {
 	background(255);
 	signal.update();
 
+	float[] data = signal.values(20);
+
 	for (int i=0; i < guys.length; i++) {
 		guys[i].update();
-		guys[i].step(signal.value());
+		guys[i].step(data[0]);
 		guys[i].draw();
 	}
+
+	vis.render(data);
 
 	pushStyle();
 	noStroke();
@@ -133,10 +140,6 @@ class Signal {
 
 		return ret;
 	}
-
-	float value() {
-		return this.values(1)[0];
-	}
 }
 
 class CompositeSignal extends Signal {
@@ -162,5 +165,39 @@ class CompositeSignal extends Signal {
 		}
 
 		return sums;
+	}
+}
+
+class Graph {
+	final int padding = 10;
+
+	int width;
+	int height;
+
+	Graph(int w, int h) {
+		this.width = w;
+		this.height = h;
+	}
+
+	void render(float[] samples) {
+		rect(0, 0, this.width, this.height);
+		int spacing = this.width / samples.length;
+
+		int last_x = 0;
+		int last_y = 0;
+
+		for (int i=0; i < samples.length; i++) {
+			int x = spacing * i;
+			int y = (-0.5) * samples[i] * (this.height - padding * 2) + (this.height / 2);
+
+			if (i > 0) {
+				line(last_x, last_y, x, y);
+			} else {
+				ellipse(x, y, 10, 10);
+			}
+
+			last_x = x;
+			last_y = y;
+		}
 	}
 }
